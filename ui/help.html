@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style id="st1">
+        .help-content {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .help-text {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size:small;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="help" class="help-content">
+        <!-- Table of Contents -->
+        <h1>Table of Content</h1>
+        <h2><a href="#essential">1. Essential</a></h2>
+        <h2><a href="#install">2. Installation</a></h2>
+        <h2><a href="#preset">3. Using Presets</a></h2>
+        <h2><a href="#profile">4. Profiles</a></h2>
+        <h2><a href="#args">5. Program Parameters</a></h2>
+        <h2><a href="#trouble">6. Trouble Shooting</a></h2>
+        <!-- Content -->
+        <div id="help" class="help-text">
+<h3><a name="essential">1. Essential</h3>
+Camera Control is a software "remote control" for conference cameras supporting the features:
+- Pan  (turn left/right).
+- Tilt (turn up/down).
+- Zoom (zoom in/out).
+- Presets (memory locations to store position and zoom level).
+
+The software is written in the programming languange "Go".
+Information concerning "Go" is available on the <a href="https://go.dev/">Official Go Webpage</a>.
+The camera is controlled using protocol "Pelco-D" on USB (COM port).
+Other protocols can be integrated easily by adjusting the "Go" sources. 
+
+There are 9 presets in the main window to access stored settings fast and easily.
+The presets are visualized using a picture, e.g. preset 1: view1.jpg.
+It is recommended to update pictures once a new position is set.
+
+If the camera is used in different environments, profiles can be used.
+A profile uses separate presets and pictures.
+Profiles are organized in sub directories and are sorted by name. 
+Following presets are used by the profiles:
+- first profile: 1..9 (pictures start with view1.jpg)
+- second profile: 10..18 (pictures start with view1.jpg)
+...
+
+The last activated preset is loaded on start or is set by program parameter.
+
+<h3><a name="install">2. Installation</h3>
+A USB (COM port) driver is required to access the camera.
+The driver can be downloaded here: <a href="http://www.wch-ic.com/search?t=downloads&q=CH341SER">CH34x Download</a>
+
+The software tries to find a device named: <b>"USB-SERIAL CH34&ltx&gt (COM&ltno&gt)"</b>
+If not found it tries to open all COM ports (0..255) until "open" succeeds.
+There is an option to add a COMPORT parameter on startup. 
+This is useful when multiple devices are connected.
+
+<b>ATTENTION:</b> The port numbers might change on reboot or when using other USB connectors!
+
+The software uses a symbolic link for storing the last profile.
+Therefore you have to enable the developer mode. 
+<a href="https://www.google.com/search?q=windows+enable+developer+mode">Guide for Enabling Developer Mode</a>
+If you have a directory "current" in the "ui" folder please delete that folder to enable creation of the symbolic link.
+If it is not enabled there is a fallback to a "copy"-mode with some limitations:   
+- All pictures are copied on profile change.  
+- The last profile is not stored.
+
+<h3><a name="preset">3. Using Presets</h3>
+A preset is activated when a picture 1..9 is selected using the mouse in the main window.
+<img src="main.png" alt="MAIN window">
+
+Presets can be programmed or updated using the menu "Camera&sol;Control".
+<img src="control.png" alt="CONTROL window">
+
+Set the new position and zoom level using the red (big steps) or blue (fine steps) buttons.
+You need to open a camera app to see a live view, e.g. windows camera app.
+Once finished you can save the setting using "Store View" checkbox and select a loction on main window.
+
+It is recommended to store the camera picture to the corresponding file in folder of the active profile,
+e.g. stored on 3. location (&lt;profile&gt;&sol;view3.jpg).
+
+The "Store View" checkbox is deactivated after programming or menu change to avoid unintentionally programming.
+You can test the new preset by switching between presets. The "Control" view can be closed after all presets are set.
+<h3><a name="profile">4. Profiles</h3>
+Create a new profile by adding a sub folder in "ui" directory with view1..9.jpg, e.g. by copying existing profile.
+Use a folder name which is sorted at the end, e.g. by using numbers, e.g. "2-Outdoor".
+Update all presets as required and update view pictures.
+
+<h3><a name="args">5. Program Parameter</h3>
+Following paramters are supported:
+-LOGFILE=&lt;path + name&gt; Default=log.txt, "" = standard output.
+-COMPORT=&lt;COM port number&gt; Default=-1, -1 = use first available port.
+-PROFILE=&lt;profile name&gt; Default="", "" = use last one.
+
+<h3><a name="trouble">6. Trouble Shooting</h3>
+The binary "Camera Control.exe" is an archive containing the runtime environment for <a href="https://github.com/asticode/go-astilectron">"Astilectron" UI</a>.
+If there are extraction or startup issues there might be corrupted files in %APPDATA%Camera Control.
+You could try to remove this folder and restart the application.
+
+Beside the binary there is a "ui" folder required. There are all HTML files, required pictures, icon and profiles.
+There are dependencies to the binary. Try update complete folder from source: delete "ui" and copy "ui" folder again from source directory.
+
+In the log file (e.g. "log.txt" beside the binary) you might find reason for issues.
+There is more detailed information compared to the error messages in the UI.
+        </div>
+    </div>
+
+    <script>
+    </script>   
+</body>
+</html>

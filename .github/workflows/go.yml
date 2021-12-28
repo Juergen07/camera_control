@@ -1,0 +1,38 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Setup astilectron-bundler
+      run:  go get -u github.com/asticode/go-astilectron-bundler && go install github.com/asticode/go-astilectron-bundler/astilectron-bundler@latest
+
+    - name: Build bundle
+      run:  astilectron-bundler
+
+    - name: Prepare output
+      run:  |
+          cd output\windows-amd64
+          xcopy ..\..\ui ui /E /I
+          xcopy ..\..\licenses licenses /E /I
+          cd ..\..
+
+    - name: Upload build result
+      uses: actions/upload-artifact@v2
+      with:
+        name: Camera-Control-windows-amd64
+        path: output\windows-amd64

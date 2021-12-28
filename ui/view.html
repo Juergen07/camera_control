@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style id="st1">
+        input[id^="view"] {
+            height: 100px;
+            width: 100px;
+        }
+        div {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .modal {
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            padding: 2%;
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: small;
+            background-color: #f3f2bf;
+            margin: auto;
+            padding: 5px;
+            border: 3px solid #888;
+            width: 80%;
+            height: 85%;
+            overflow: auto;
+        }
+        .error-content {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: medium;
+            color:#ff0000;
+            background-color: #f3f2bf;
+            margin: auto;
+            padding: 7%;
+            border: 3px solid #ff0000;
+            width: 60%;
+            height: 65%;
+            overflow: auto;
+        }
+        .error-detail {
+            color:#000;
+            font-size:small;
+            word-wrap: break-word;
+        }
+        .close {
+            color: #d12323;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }        
+    </style>
+</head>
+<body>
+    <div>
+        <input type="image" id="view1" src="current/view1.jpg" />
+        <input type="image" id="view2" src="current/view2.jpg" />
+        <input type="image" id="view3" src="current/view3.jpg" />
+        <input type="image" id="view4" src="current/view4.jpg" />
+        <input type="image" id="view5" src="current/view5.jpg" />
+        <input type="image" id="view6" src="current/view6.jpg" />
+        <input type="image" id="view7" src="current/view7.jpg" />
+        <input type="image" id="view8" src="current/view8.jpg" />
+        <input type="image" id="view9" src="current/view9.jpg" />
+    </div>
+    <div id="about" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>
+                <b style="color:rgba(0, 0, 255, 1);font-size:16px">Camera Control V1.3</b> (open source)<br>
+                <i style="color:rgb(126, 126, 126);font-size:10px">für Kamera Tenveo NV10U</i><br><br>
+                <img src="emk-logo.png" alt="emk-logo" style="position:absolute;top:60px;right:35px;width:100px;height:60px;">
+                Entwickelt für<br>
+                Ev.-meth. Kirche Laichingen<br>
+                <u>http://www.emk-laichingen.de</u><br>
+                <br>
+                <b>Spenden gerne an Gemeindekonto:</b><br>
+                Sparkasse Laichingen, BIC: SOLADES1ULM<br>
+                IBAN: DE13 6305 0000 0008 6209 01
+                <hr>
+                MIT License,<u style="font-size:10px">https://de.wikipedia.org/wiki/MIT-Lizenz</u>
+                Copyright (c) 2021 Hans Jürgen Högerle<br>
+                <br>
+                Powered by Open Source Software<br>
+                see "licenses" folder.<br>
+            </p>
+          </div>
+    </div>
+    <div id="ioerror" class="modal">
+        <div class="error-content">
+            <span class="close">&times;</span>
+            <p>
+                <b><br>Camera access failure!<br><br></b>
+                <b class="error-detail" id="ioerrormsg"></b>
+            </p>
+          </div>
+    </div>
+    <div id="initerror" class="modal">
+        <div class="error-content">
+            <span class="close">&times;</span>
+            <p>
+                <b><br>Start failed!<br><br></b>
+                <b class="error-detail" id="initerrormsg"></b>
+            </p>
+          </div>
+    </div>
+
+    <script>
+        var about = document.getElementById("about");
+        var ioerror = document.getElementById("ioerror");
+        var ioerrormsg = document.getElementById("ioerrormsg");
+        var initerror = document.getElementById("initerror");
+        var initerrormsg = document.getElementById("initerrormsg");
+
+        function closeDialog(all) {
+            if (about.style.display == "block") {
+                about.style.display = "none";
+                if (!all) {
+                    return;
+                }
+            }
+            if (initerror.style.display == "block") {
+                initerror.style.display = "none";
+                if (!all) {
+                    return;
+                }
+            }
+            if (ioerror.style.display == "block") {
+                ioerror.style.display = "none";
+                if (!all) {
+                    return;
+                }
+            }
+        }
+
+        document.addEventListener("click", function(){
+            closeDialog(false)
+            var source = event.target || event.srcElement;
+            astilectron.sendMessage(source.id);
+        })
+        document.addEventListener('astilectron-ready', function() {
+            astilectron.onMessage(function(message) {
+                if (message === "about") {
+                    closeDialog(true);
+                    about.style.display = "block";
+                } else if (message.indexOf("io-error-")==0) {
+                    ioerror.style.display = "block";
+                    ioerrormsg.innerText = message.substring(9);
+                } else if (message.indexOf("init-error-")==0) {
+                    initerror.style.display = "block";
+                    initerrormsg.innerText = message.substring(11);
+                } else if (message === "test") {
+                    document
+                } else if (message === "close-dialog") {
+                    closeDialog(true);
+                }
+            });
+        })        
+    </script>   
+</body>
+</html>

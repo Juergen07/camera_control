@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style id="st1">
+        #control {
+            position: absolute;
+            height: 300px;
+            width: 320px;
+            visibility:visible;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        #control_fine {
+            position: absolute;
+            top:50%;
+            left:50%;
+            height:50%;
+            width:50%;
+        }
+        input[id^="ctrl_a"] {
+            visibility:visible;
+            position: absolute;
+            height: 20%;
+            width: 20%;
+        }
+        input[id^="ctrl_xa"] {
+            position: absolute;
+            height: 10%;
+            width: 10%;
+        }
+        input[id^="ctrl_b"] {
+            position: absolute;
+            height: 33%;
+            width: 33%;
+        }
+        input[id^="ctrl_xb"] {
+            position: absolute;
+            height: 17%;
+            width: 17%;
+        }
+        #store {
+            float:right;
+            font-weight: bold; 
+        }
+        #store:hover {
+            cursor: pointer;  
+        }
+        #storetext {
+            float:right;
+            font-weight: bold; 
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #storetext:hover {
+            cursor: pointer;  
+        }
+    </style>
+</head>
+<body>
+    <div id="control">
+        <input type="checkbox" id="store">
+        <label id="storetext" for="store">Store view</label>
+        <input type="image" id="ctrl_a3" src="ctrl_a3.png"  style="top: 0%;left:20%"/>
+        <input type="image" id="ctrl_a2" src="ctrl_a2.png"  style="top:20%;left: 0%"/>
+        <input type="image" id="ctrl_a1" src="ctrl_a1.png"  style="top:20%;left:40%"/>
+        <input type="image" id="ctrl_a4" src="ctrl_a4.png"  style="top:40%;left:20%"/>
+        <input type="image" id="ctrl_a5" src="ctrl_a5.png"  style="top:20%;left:20%"/>
+        <input type="image" id="ctrl_xa6" src="ctrl_a5.png" style="top:35%;left:35%"/>
+
+        <div id="control_fine">
+            <input type="image" id="ctrl_b3" src="ctrl_b3.png"  style="bottom:66%;right:33%"/>
+            <input type="image" id="ctrl_b2" src="ctrl_b2.png"  style="bottom:33%;right:66%"/>
+            <input type="image" id="ctrl_b1" src="ctrl_b1.png"  style="bottom:33%;right: 0%"/>
+            <input type="image" id="ctrl_b4" src="ctrl_b4.png"  style="bottom: 0%;right:33%"/>
+            <input type="image" id="ctrl_b5" src="ctrl_b5.png"  style="bottom:33%;right:33%"/>
+            <input type="image" id="ctrl_xb6" src="ctrl_b5.png" style="bottom:23%;right:23%"/>
+        </div>
+    </div>
+
+    <script>
+        var store = document.getElementById("store")
+        var storetext = document.getElementById("storetext")
+        document.addEventListener('click', function(){
+            var source = event.target || event.srcElement;
+            if (source == store || source == storetext) {
+                return;
+            }
+            astilectron.sendMessage(source.id);
+        })
+        store.addEventListener('change', function(){
+            astilectron.sendMessage("store:" + this.checked);
+        })
+        document.addEventListener('astilectron-ready', function() {
+            astilectron.onMessage(function(message) {
+                if (message === "store:off") {
+                    store.checked = false;
+                }
+            });
+        })        
+    </script>   
+</body>
+</html>
